@@ -11,7 +11,7 @@ let users = [
   {
     id: 1,
     name: "Timo",
-    favorites: ["Dune"],
+    favorites: [3],
   },
 ];
 
@@ -113,81 +113,101 @@ let genres = [
 
 let movies = [
   {
+    id: 1,
     name: "Blade Runner",
     director: "Ridley Scott",
     released: 1982,
     genre: ["Science fiction"],
-    description: "Blade Runner is a 1982 science fiction film directed by Ridley Scott from a screenplay by Hampton Fancher and David Peoples. Starring Harrison Ford, Rutger Hauer, Sean Young, and Edward James Olmos, it is an adaptation of Philip K. Dick's 1968 novel Do Androids Dream of Electric Sheep? The film is set in a dystopian future Los Angeles of 2019, in which synthetic humans known as replicants are bio-engineered by the powerful Tyrell Corporation to work on space colonies. When a fugitive group of advanced replicants led by Roy Batty (Hauer) escapes back to Earth, burnt-out cop Rick Deckard (Ford) reluctantly agrees to hunt them down",
+    description:
+      "Blade Runner is a 1982 science fiction film directed by Ridley Scott from a screenplay by Hampton Fancher and David Peoples. Starring Harrison Ford, Rutger Hauer, Sean Young, and Edward James Olmos, it is an adaptation of Philip K. Dick's 1968 novel Do Androids Dream of Electric Sheep? The film is set in a dystopian future Los Angeles of 2019, in which synthetic humans known as replicants are bio-engineered by the powerful Tyrell Corporation to work on space colonies. When a fugitive group of advanced replicants led by Roy Batty (Hauer) escapes back to Earth, burnt-out cop Rick Deckard (Ford) reluctantly agrees to hunt them down",
     imageURL: "",
   },
   {
+    id: 2,
     name: "Lord of the rings",
     director: "Peter Jackson",
     released: 2001,
     genre: ["Fantasy"],
-    description: "The Lord of the Rings is a trilogy of epic fantasy adventure films directed by Peter Jackson, based on the novel The Lord of the Rings by English author J. R. R. Tolkien. The films are titled identically to the three volumes of the novel: The Fellowship of the Ring (2001), The Two Towers (2002), and The Return of the King (2003). Produced and distributed by New Line Cinema with the co-production of WingNut Films, the films feature an ensemble cast including Elijah Wood, Ian McKellen, Liv Tyler, Viggo Mortensen, Sean Astin, Cate Blanchett, John Rhys-Davies, Christopher Lee, Billy Boyd, Dominic Monaghan, Orlando Bloom, Hugo Weaving, Andy Serkis, and Sean Bean. ",
+    description:
+      "The Lord of the Rings is a trilogy of epic fantasy adventure films directed by Peter Jackson, based on the novel The Lord of the Rings by English author J. R. R. Tolkien. The films are titled identically to the three volumes of the novel: The Fellowship of the Ring (2001), The Two Towers (2002), and The Return of the King (2003). Produced and distributed by New Line Cinema with the co-production of WingNut Films, the films feature an ensemble cast including Elijah Wood, Ian McKellen, Liv Tyler, Viggo Mortensen, Sean Astin, Cate Blanchett, John Rhys-Davies, Christopher Lee, Billy Boyd, Dominic Monaghan, Orlando Bloom, Hugo Weaving, Andy Serkis, and Sean Bean. ",
     imageURL: "",
   },
   {
+    id: 3,
     name: "Dune",
     director: "Denis Villeneuve",
     released: 2021,
     genre: ["Science fiction"],
-    description: "Dune (titled on-screen as Dune: Part One) is a 2021 American epic science fiction film directed and co-produced by Denis Villeneuve, who co-wrote the screenplay with Jon Spaihts, and Eric Roth. It is the first of a two-part adaptation of the 1965 novel by Frank Herbert. Set in the distant future, the film follows Paul Atreides as his family, the noble House Atreides, is thrust into a war for the deadly and inhospitable desert planet Arrakis.",
+    description:
+      "Dune (titled on-screen as Dune: Part One) is a 2021 American epic science fiction film directed and co-produced by Denis Villeneuve, who co-wrote the screenplay with Jon Spaihts, and Eric Roth. It is the first of a two-part adaptation of the 1965 novel by Frank Herbert. Set in the distant future, the film follows Paul Atreides as his family, the noble House Atreides, is thrust into a war for the deadly and inhospitable desert planet Arrakis.",
     imageURL: "",
   },
   {
+    id: 4,
     name: "Ghost in the shell",
     director: "Mamoru Oshii",
     released: 1995,
     genre: ["Science fiction"],
-    description: "Ghost in the Shell[a] is a 1995 adult Japanese-animated tech noir cyberpunk action thriller film[8][9] directed by Mamoru Oshii from a screenplay by Kazunori Itō. The film is based on the 1989–90 manga of the same name by Masamune Shirow. It stars the voices of Atsuko Tanaka, Akio Ōtsuka, and Iemasa Kayumi. It is a Japanese-British international co-production between Kodansha, Bandai Visual and Manga Entertainment, with animation provided by Production I.G.",
+    description:
+      "Ghost in the Shell[a] is a 1995 adult Japanese-animated tech noir cyberpunk action thriller film[8][9] directed by Mamoru Oshii from a screenplay by Kazunori Itō. The film is based on the 1989–90 manga of the same name by Masamune Shirow. It stars the voices of Atsuko Tanaka, Akio Ōtsuka, and Iemasa Kayumi. It is a Japanese-British international co-production between Kodansha, Bandai Visual and Manga Entertainment, with animation provided by Production I.G.",
     imageURL: "",
   },
   {
+    id: 5,
     name: "Knives out",
     director: "Rian Johnson",
     released: 2020,
     genre: ["Mystery"],
-    description: "Knives Out is a 2019 American mystery film written and directed by Rian Johnson. Daniel Craig leads an eleven-actor ensemble cast as Benoit Blanc, a famed private detective who is summoned to investigate the death of the bestselling author Harlan Thrombey (Christopher Plummer). Police rule Harlan's death a suicide but Blanc suspects foul play, and investigates to find the true cause of his death. Johnson produced Knives Out with his longtime collaborator Ram Bergman. Funding came from MRC and a multi-million-dollar tax subsidy from the Government of Massachusetts.",
+    description:
+      "Knives Out is a 2019 American mystery film written and directed by Rian Johnson. Daniel Craig leads an eleven-actor ensemble cast as Benoit Blanc, a famed private detective who is summoned to investigate the death of the bestselling author Harlan Thrombey (Christopher Plummer). Police rule Harlan's death a suicide but Blanc suspects foul play, and investigates to find the true cause of his death. Johnson produced Knives Out with his longtime collaborator Ram Bergman. Funding came from MRC and a multi-million-dollar tax subsidy from the Government of Massachusetts.",
     imageURL: "",
   },
   {
+    id: 6,
     name: "Spirited away",
     director: "Hayao Miyazaki",
     released: 2001,
     genre: ["Fantasy"],
-    description: "Spirited Away (Japanese: 千と千尋の神隠し, Hepburn: Sen to Chihiro no Kamikakushi, lit. 'Sen and Chihiro's Spiriting Away') is a 2001 Japanese animated fantasy film written and directed by Hayao Miyazaki. Spirited Away tells the story of Chihiro 'Sen' Ogino, a ten-year-old girl who, while moving to a new neighborhood, inadvertently enters the world of kami (spirits of Japanese Shinto folklore). After her parents are turned into pigs by the witch Yubaba, Chihiro takes a job working in Yubaba's bathhouse to find a way to free herself and her parents and return to the human world. The film was animated by Studio Ghibli for Tokuma Shoten, Nippon Television Network, Dentsu, Buena Vista Home Entertainment, Tohokushinsha Film, and Mitsubishi and distributed by Toho. ",
+    description:
+      "Spirited Away (Japanese: 千と千尋の神隠し, Hepburn: Sen to Chihiro no Kamikakushi, lit. 'Sen and Chihiro's Spiriting Away') is a 2001 Japanese animated fantasy film written and directed by Hayao Miyazaki. Spirited Away tells the story of Chihiro 'Sen' Ogino, a ten-year-old girl who, while moving to a new neighborhood, inadvertently enters the world of kami (spirits of Japanese Shinto folklore). After her parents are turned into pigs by the witch Yubaba, Chihiro takes a job working in Yubaba's bathhouse to find a way to free herself and her parents and return to the human world. The film was animated by Studio Ghibli for Tokuma Shoten, Nippon Television Network, Dentsu, Buena Vista Home Entertainment, Tohokushinsha Film, and Mitsubishi and distributed by Toho. ",
     imageURL: "",
   },
   {
+    id: 7,
     name: "The Abyss",
     director: "James Cameron",
     released: 1989,
     genre: ["Science fiction"],
-    description: "The Abyss is a 1989 American science fiction film written and directed by James Cameron and starring Ed Harris, Mary Elizabeth Mastrantonio, and Michael Biehn. When an American submarine sinks in the Caribbean, a US search and recovery team works with an oil platform crew, racing against Soviet vessels to recover the boat. Deep in the ocean, they encounter something unexpected. The film was released on August 9, 1989, receiving generally positive reviews and grossed $90 million. It was nominated for four Academy Awards and won the Academy Award for Best Visual Effects.",
+    description:
+      "The Abyss is a 1989 American science fiction film written and directed by James Cameron and starring Ed Harris, Mary Elizabeth Mastrantonio, and Michael Biehn. When an American submarine sinks in the Caribbean, a US search and recovery team works with an oil platform crew, racing against Soviet vessels to recover the boat. Deep in the ocean, they encounter something unexpected. The film was released on August 9, 1989, receiving generally positive reviews and grossed $90 million. It was nominated for four Academy Awards and won the Academy Award for Best Visual Effects.",
     imageURL: "",
   },
   {
+    id: 8,
     name: "Godzilla minus one",
     director: "Takashi Yamazaki",
     released: 2023,
     genre: ["Science fiction", "Action"],
-    description: "Godzilla Minus One (Japanese: ゴジラ-1.0, Hepburn: Gojira Mainasu Wan) is a 2023 Japanese epic[i] kaiju film written, directed, and with visual effects by Takashi Yamazaki. It is the 37th film in the Godzilla franchise, Toho's 33rd Godzilla film, and the fifth installment of the Reiwa era.[b] Set in postwar Japan, the film stars Ryunosuke Kamiki as a former kamikaze pilot suffering from post-traumatic stress disorder after encountering a giant monster known as 'Godzilla'. The supporting cast includes Minami Hamabe, Yuki Yamada, Munetaka Aoki, Hidetaka Yoshioka, Sakura Ando, and Kuranosuke Sasaki.",
+    description:
+      "Godzilla Minus One (Japanese: ゴジラ-1.0, Hepburn: Gojira Mainasu Wan) is a 2023 Japanese epic[i] kaiju film written, directed, and with visual effects by Takashi Yamazaki. It is the 37th film in the Godzilla franchise, Toho's 33rd Godzilla film, and the fifth installment of the Reiwa era.[b] Set in postwar Japan, the film stars Ryunosuke Kamiki as a former kamikaze pilot suffering from post-traumatic stress disorder after encountering a giant monster known as 'Godzilla'. The supporting cast includes Minami Hamabe, Yuki Yamada, Munetaka Aoki, Hidetaka Yoshioka, Sakura Ando, and Kuranosuke Sasaki.",
     imageURL: "",
   },
   {
+    id: 9,
     name: "Anchorman",
     director: "Adam McKay",
     released: 2004,
     genre: ["Comedy"],
-    description: "Anchorman: The Legend of Ron Burgundy is a 2004 American satirical comedy film directed by Adam McKay in his directorial debut, produced by Judd Apatow, starring Will Ferrell and Christina Applegate and written by McKay and Ferrell. The first installment in the Anchorman series, the film is a tongue-in-cheek take on the culture of the 1970s, particularly the new Action News format. It portrays a San Diego television station where Ferrell's title character clashes with his new female counterpart.",
+    description:
+      "Anchorman: The Legend of Ron Burgundy is a 2004 American satirical comedy film directed by Adam McKay in his directorial debut, produced by Judd Apatow, starring Will Ferrell and Christina Applegate and written by McKay and Ferrell. The first installment in the Anchorman series, the film is a tongue-in-cheek take on the culture of the 1970s, particularly the new Action News format. It portrays a San Diego television station where Ferrell's title character clashes with his new female counterpart.",
     imageURL: "",
   },
   {
+    id: 10,
     name: "The Big Lebowsky",
     director: "Joel & Ethan Coen",
-    description: "The Big Lebowski (/ləˈbaʊski/) is a 1998 crime comedy film written, directed, produced and co-edited by Joel and Ethan Coen. It follows the life of Jeffrey 'The Dude' Lebowski (Jeff Bridges), a Los Angeles slacker and avid bowler. He is assaulted as a result of mistaken identity then learns that a millionaire, also named Jeffrey Lebowski (David Huddleston), was the intended victim. The millionaire Lebowski's trophy wife is supposedly kidnapped and millionaire Lebowski commissions The Dude to deliver the ransom to secure her release. The plan goes awry when the Dude's friend Walter Sobchak (John Goodman) schemes to keep the ransom money for the Dude and himself. Sam Elliott, Julianne Moore, Steve Buscemi, John Turturro, Philip Seymour Hoffman, Tara Reid, David Thewlis, Peter Stormare, Jimmie Dale Gilmore, Jon Polito and Ben Gazzara also appear in supporting roles. ",
+    description:
+      "The Big Lebowski (/ləˈbaʊski/) is a 1998 crime comedy film written, directed, produced and co-edited by Joel and Ethan Coen. It follows the life of Jeffrey 'The Dude' Lebowski (Jeff Bridges), a Los Angeles slacker and avid bowler. He is assaulted as a result of mistaken identity then learns that a millionaire, also named Jeffrey Lebowski (David Huddleston), was the intended victim. The millionaire Lebowski's trophy wife is supposedly kidnapped and millionaire Lebowski commissions The Dude to deliver the ransom to secure her release. The plan goes awry when the Dude's friend Walter Sobchak (John Goodman) schemes to keep the ransom money for the Dude and himself. Sam Elliott, Julianne Moore, Steve Buscemi, John Turturro, Philip Seymour Hoffman, Tara Reid, David Thewlis, Peter Stormare, Jimmie Dale Gilmore, Jon Polito and Ben Gazzara also appear in supporting roles. ",
     released: 1998,
     genre: ["Comedy"],
     imageURL: "",
@@ -248,7 +268,7 @@ app.post("/users", (req, res) => {
 app.put("/users/:id", (req, res) => {
   const { id } = req.params;
   const updatedUser = req.body;
-  let user = users.find((user) => user.id == id);
+  let user = users.find(user => user.id == id);
 
   if (user) {
     user.name = updatedUser.name;
@@ -262,35 +282,37 @@ app.delete("/users/:id", (req, res) => {
   const user = users.find((user) => user.id == id);
 
   if (user) {
-    users = users.filter((user) => user.id != id);
+    users = users.filter(user => user.id != id);
     res.status(200).send(`User ${id} succesfully deleted`);
   } else res.status(400).send("User not found");
 });
 
 //Adds a movie to user's favorites
-app.post("/users/:id/:movieName", (req, res) => {
-  const { id, movieName } = req.params;
-  const user = users.find((user) => user.id == id);
+app.patch("/users/:userId/favorites/:movieId", (req, res) => {
+  const { userId, movieId } = req.params;
+  const user = users.find(user => user.id == userId);
+  const movie = movies.find(movie => movie.id == movieId)
 
   if (user) {
-    user.favorites.push(movieName);
+    user.favorites.push(movie);
     res
       .status(200)
-      .send(`Movie "${movieName}" succesfully added to user ${id} favorites`);
+      .send(`Movie ${movie.name} succesfully added to user ${userId} favorites`);
   } else res.status(400).send("User not found");
 });
 
 //Deletes a movie from favorites
-app.delete("/users/:id/:movieName", (req, res) => {
-  const { id, movieName } = req.params;
-  const user = users.find((user) => user.id == id);
+app.delete("/users/:userId/favorites/:movieId", (req, res) => {
+  const { userId, movieId } = req.params;
+  const user = users.find(user => user.id == userId);
+  const movie = movies.find(movie => movie.id == movieId)
 
   if (user) {
-    user.favorites = user.favorites.filter((movie) => movieName !== movie.name);
+    user.favorites = user.favorites.filter((movie) => movieId !== movie.id);
     res
       .status(200)
       .send(
-        `Movie "${movieName}" succesfully deleted from user ${id} favorites`
+        `Movie ${movie.name} succesfully deleted from user ${userId} favorites`
       );
   } else res.status(400).send("User not found");
 });

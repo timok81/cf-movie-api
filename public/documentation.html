@@ -99,8 +99,8 @@
             </tr>
             <tr>
                 <th scope="row">Add a movie to favorites</th>
-                <th scope="row">/users/<span>[id]/[movie]</span></th>
-                <th scope="row">POST</th>
+                <th scope="col">/users/<span>[userId]</span>/favorites/<span>[movieId]</span></th>
+                <th scope="row">PATCH</th>
                 <th scope="row">None</th>
                 <th scope="row">
                     A text message indicating whether the movie was succesfully added.
@@ -108,7 +108,7 @@
             </tr>
             <tr>
                 <th scope="col">Remove movie from favorites</th>
-                <th scope="col">/users/<span>[id]/[movie]</span></th>
+                <th scope="col">/users/<span>[userId]</span>/favorites/<span>[movieId]</span></th>
                 <th scope="col">DELETE</th>
                 <th scope="col">None</th>
                 <th scope="col">A text message indicating whether the movie was succesfully deleted.</th>
