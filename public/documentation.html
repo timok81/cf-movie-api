@@ -4,14 +4,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentation</title>
+    <link rel="stylesheet" href="../css/styles_documentation.css">
+    <title>Movie database API Documentation</title>
 </head>
 
 <body>
-    <h1>Movie database API</h1>
-    <p>
-        API for app that provides users with access to information about different movies, directors, and genres.
-    </p>
+    <table>
+        <caption>
+            Movie database API
+        </caption>
+        <thead>
+            <tr>
+                <th scope="col">Request</th>
+                <th scope="col">URL/Params</th>
+                <th scope="col">HTTP Method</th>
+                <th scope="col">Request body data format</th>
+                <th scope="col">Response body data format</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">Get list of movies</th>
+                <th scope="row">/movies</th>
+                <th scope="row">GET</th>
+                <th scope="row">none</th>
+                <th scope="row">A JSON object holding data about all the movies</th>
+            </tr>
+            <tr>
+                <th scope="row">Get data about a single movie by name</th>
+                <th scope="row">/movies/<span>[name]</span></th>
+                <th scope="row">GET</th>
+                <th scope="row">none</th>
+                <th scope="row">
+                    A JSON object holding data about a single movie.
+                </th>
+            </tr>
+            <tr>
+                <th scope="row">Get data about a genre</th>
+                <th scope="row">/genres/<span>[name]</span></th>
+                <th scope="row">GET</th>
+                <th scope="row">none</th>
+                <th scope="row">A JSON object holding data about a genre.
+                </th>
+            </tr>
+            <tr>
+                <th scope="row">Get data about a director</th>
+                <th scope="row">/directors/<span>[name]</span></th>
+                <th scope="row">GET</th>
+                <th scope="row">none</th>
+                <th scope="row">A JSON object holding data about a director.</th>
+            </tr>
+            <tr>
+                <th scope="row">Create a user account</th>
+                <th scope="row">/users</th>
+                <th scope="row">POST</th>
+                <th scope="row">A JSON object holding data about the user.
+                    <br>
+                    <br>
+                    Example:
+                    <br>
+                    <code>
+                        {
+                            "name": "Donnie",
+                            "favorites": []
+                        }
+                        </code>
+                </th>
+                <th scope="row">A text message indicating that an account was created.</th>
+            </tr>
+            <tr>
+                <th scope="row">Update username</th>
+                <th scope="row">/users/<span>[id]</span></th>
+                <th scope="row">PUT</th>
+                <th scope="row">A JSON object holding data about the user.
+                    <br>
+                    <br>
+                    Example:
+                    <br>
+                    <code>
+                        {
+                            "name": "Ronnie",
+                            "favorites": []
+                        }
+                        </code>
+                </th>
+                <th scope="row">A text message indicating that the username was changed.</th>
+            </tr>
+            <tr>
+                <th scope="row">Delete a user account</th>
+                <th scope="row">/users/<span>[id]</span></th>
+                <th scope="row">DELETE</th>
+                <th scope="row">None</th>
+                <th scope="row">A text message indicating that a user account was deleted.</th>
+            </tr>
+            <tr>
+                <th scope="row">Add a movie to favorites</th>
+                <th scope="row">/users/<span>[id]/[movie]</span></th>
+                <th scope="row">POST</th>
+                <th scope="row">None</th>
+                <th scope="row">
+                    A text message indicating whether the movie was succesfully added.
+                </th>
+            </tr>
+            <tr>
+                <th scope="col">Remove movie from favorites</th>
+                <th scope="col">/users/<span>[id]/[movie]</span></th>
+                <th scope="col">DELETE</th>
+                <th scope="col">None</th>
+                <th scope="col">A text message indicating whether the movie was succesfully deleted.</th>
+            </tr>
+        </tbody>
+
+    </table>
+
 </body>
 
 </html>

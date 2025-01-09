@@ -1,0 +1,48 @@
+body {
+    background-color: rgb(40, 41, 54);
+    color: white;
+    padding: 32px;
+}
+
+table {
+    border-collapse: collapse;
+    border: 2px solid rgb(255, 255, 255, 0.5);
+    font-family: sans-serif;    
+    letter-spacing: 1px;
+    text-align: left;
+}
+
+thead {
+    background-color: rgb(42, 145, 230);
+}
+
+th,
+td {
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 10px;
+    font-weight: 100;
+    color: rgb(216, 216, 216);
+    text-align: left;
+}
+
+thead tr th {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: black;
+}
+
+caption {
+  padding: 10px;
+  font-weight: bold;
+  text-align: left;
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+}
+
+code {
+    color: aqua;
+}
+
+span {
+    color: rgb(171, 233, 0);
+}
