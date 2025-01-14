@@ -24,7 +24,7 @@
         </thead>
         <tbody>
             <tr>
-                <th scope="row">Get list of movies</th>
+                <th scope="row">Get list of all movies</th>
                 <th scope="row">/movies</th>
                 <th scope="row">GET</th>
                 <th scope="row">none</th>
@@ -55,6 +55,13 @@
                 <th scope="row">A JSON object holding data about a director.</th>
             </tr>
             <tr>
+                <th scope="row">Get a list of all actors</th>
+                <th scope="row">/actors</th>
+                <th scope="row">GET</th>
+                <th scope="row">none</th>
+                <th scope="row">A JSON object holding data about all actors.</th>
+            </tr>
+            <tr>
                 <th scope="row">Get data about an actor</th>
                 <th scope="row">/actors/<span>[name]</span></th>
                 <th scope="row">GET</th>
@@ -70,17 +77,21 @@
                     <br>
                     Example:
                     <br>
+                    <br>
                     <code>
-                        {
-                            "name": "Donnie",
-                            "favorites": []
+                        {<br>
+                            "Username": "DonnieDark",<br>
+                            "Password": "ddd123",<br>
+                            "Email": "donald@example.com",<br>
+                            "Birthday": "1980-06-17",<br>
+                            "FavouriteMovies": []<br>
                         }
                         </code>
                 </th>
-                <th scope="row">A text message indicating that an account was created.</th>
+                <th scope="row">A JSON object holding data about the user.</th>
             </tr>
             <tr>
-                <th scope="row">Update username</th>
+                <th scope="row">Update user info</th>
                 <th scope="row">/users/<span>[id]</span></th>
                 <th scope="row">PUT</th>
                 <th scope="row">A JSON object holding data about the user.
@@ -88,14 +99,18 @@
                     <br>
                     Example:
                     <br>
+                    <br>
                     <code>
-                        {
-                            "name": "Ronnie",
-                            "favorites": []
+                        {<br>
+                            "Username": "DonnieDark",<br>
+                            "Password": "ddd123",<br>
+                            "Email": "donald@example.com",<br>
+                            "Birthday": "1980-06-17",<br>
+                            "FavouriteMovies": []<br>
                         }
                         </code>
                 </th>
-                <th scope="row">A text message indicating that the username was changed.</th>
+                <th scope="row">A JSON object holding data about the user.</th>
             </tr>
             <tr>
                 <th scope="row">Delete a user account</th>
