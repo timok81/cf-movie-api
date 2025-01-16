@@ -12,8 +12,28 @@ const Actors = Models.Actor;
 mongoose.connect("mongodb://127.0.0.1:27017/cfMovies");
 
 const app = express();
-//app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
+const { check, validationResult } = require("express-validator");
 app.use(bodyParser.json());
+const cors = require("cors");
+
+let allowedOrigins = ["http://localhost:8080"];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        let message =
+          "The CORS policy for this application doesn't allow access from origin" +
+          origin;
+        return callback(new Error(message), false);
+      }
+      return callback(null, true);
+    },
+  })
+);
+
 let auth = require("./auth")(app);
 const passport = require("passport");
 require("./passport");
@@ -21,6 +41,8 @@ require("./passport");
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("common"));
 app.use(express.static("public"));
+
+//------------------------------------------------------------------//
 
 app.get("/", (req, res) => {
   res.send("Welcome to the movie database!");
@@ -94,31 +116,48 @@ app.get(
   }
 );
 
-//Create a user
-app.post("/users", async (req, res) => {
-  await Users.findOne({ Username: req.body.Username })
-    .then((user) => {
-      if (user)
-        return res.status(400).send(req.body.Username + " already exists");
-      else {
-        Users.create({
-          Username: req.body.Username,
-          Password: req.body.Password,
-          Email: req.body.Email,
-          Birthday: req.body.Birthday,
-        })
-          .then((user) => res.status(201).json(user))
-          .catch((error) => {
-            console.error(error);
-            res.status(500).send("Error: " + error);
-          });
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).send("Error: " + error);
-    });
-});
+//Create a user, hash password with bcrypt, validate fields with express-validator
+app.post(
+  "/users",
+  [
+    check("Username", "Username is required").isLength({ min: 5 }),
+    check(
+      "Username",
+      "Username may only contain alphanumeric characters"
+    ).isAlphanumeric({ min: 5 }),
+    check("Password", "Password is required").not().isEmpty(),
+    check("Email", "Invalid Email").isEmail(),
+  ],
+  async (req, res) => {
+    let errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+    let hashedPassword = Users.hashPassword(req.body.Password);
+    await Users.findOne({ Username: req.body.Username })
+      .then((user) => {
+        if (user)
+          return res.status(400).send(req.body.Username + " already exists");
+        else {
+          Users.create({
+            Username: req.body.Username,
+            Password: hashedPassword,
+            Email: req.body.Email,
+            Birthday: req.body.Birthday,
+          })
+            .then((user) => res.status(201).json(user))
+            .catch((error) => {
+              console.error(error);
+              res.status(500).send("Error: " + error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).send("Error: " + error);
+      });
+  }
+);
 
 //Get all users
 app.get(
@@ -152,11 +191,24 @@ app.get(
   }
 );
 
-//Updates user info by ID
+//Update user info by user ID, validate fields with express-validator
 app.put(
   "/users/:UserID",
+  [
+    check("Username", "Username is required").isLength({ min: 5 }),
+    check(
+      "Username",
+      "Username may only contain alphanumeric characters"
+    ).isAlphanumeric({ min: 5 }),
+    check("Password", "Password is required").not().isEmpty(),
+    check("Email", "Invalid Email").isEmail(),
+  ],
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+    let errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
     if (req.user._id != req.params.UserID) {
       return res.status(400).send("Permission denied");
     }
@@ -182,7 +234,7 @@ app.put(
   }
 );
 
-//Removes user
+//Removes user by ID(can only be done by an account with the same ID)
 app.delete(
   "/users/:UserID",
   passport.authenticate("jwt", { session: false }),
@@ -205,7 +257,7 @@ app.delete(
   }
 );
 
-//Adds a movie to user's favorites
+//Adds a movie to user's favorites, both by ID
 app.patch(
   "/users/:UserID/movies/:MovieID",
   passport.authenticate("jwt", { session: false }),
@@ -232,7 +284,7 @@ app.patch(
   }
 );
 
-//Deletes a movie from favorites
+//Deletes a movie from favorites, by ID
 app.delete(
   "/users/:UserID/movies/:MovieID",
   passport.authenticate("jwt", { session: false }),
@@ -300,6 +352,7 @@ app.use((err, req, res, next) => {
   req.status(500).send("Error");
 });
 
-app.listen(8080, () => {
-  console.log("Listening to port 8080");
+const port = process.env.PORT || 8080;
+app.listen(port, "0.0.0.0", () => {
+  console.log("Listening on Port " + port);
 });
