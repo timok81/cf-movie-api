@@ -28,7 +28,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "http://localhost:8080", // Update with your server URL
+        url: process.env.CONNECTION_URI,
       },
     ],
     components: {
@@ -36,7 +36,7 @@ const swaggerOptions = {
         bearerAuth: {
           type: "http",
           scheme: "bearer",
-          bearerFormat: "JWT", // Optional, but indicates that it's a JWT
+          bearerFormat: "JWT",
         },
       },
     },
@@ -46,7 +46,7 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ["index.js"], // Update with the path to your route file
+  apis: ["index.js"],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
@@ -198,7 +198,7 @@ app.get(
  *     security:
  *       - bearerAuth: []
  *     tags:
- *       - Genres
+ *       - Directors
  *     parameters:
  *       - in: path
  *         name: Name
@@ -418,7 +418,7 @@ app.get(
  *     security:
  *       - bearerAuth: []
  *     tags:
- *       - Genres
+ *       - Users
  *     parameters:
  *       - in: path
  *         name: Name
@@ -899,7 +899,7 @@ app.get(
  *     security:
  *       - bearerAuth: []
  *     tags:
- *       - Genres
+ *       - Actors
  *     parameters:
  *       - in: path
  *         name: Name
