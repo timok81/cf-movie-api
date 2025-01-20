@@ -11,7 +11,7 @@ const Movies = Models.Movie;
 const Users = Models.User;
 const Actors = Models.Actor;
 
-//mongoose.connect(process.env.CONNECTION_URI);
+mongoose.connect(process.env.CONNECTION_URI);
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
