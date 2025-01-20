@@ -9,7 +9,6 @@ const Movies = Models.Movie;
 const Users = Models.User;
 const Actors = Models.Actor;
 
-//mongoose.connect("mongodb://127.0.0.1:27017/cfMovies");
 mongoose.connect(process.env.CONNECTION_URI);
 
 const app = express();
@@ -111,6 +110,12 @@ app.post(
       "Username contains non alphanumeric characters - not allowed."
     ).isAlphanumeric(),
     check("Password", "Password is required").not().isEmpty(),
+    check("Password", "Password must have at least 8 characters").isLength({
+      min: 8,
+    }),
+    check("Password")
+      .custom((value) => !/\s/.test(value))
+      .withMessage("Password must not have spaces"),
     check("Email", "Invalid Email").isEmail(),
   ],
   async (req, res) => {
@@ -165,14 +170,18 @@ app.get(
   "/users/:Username",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    await Users.findOne({ Username: req.params.Username })
-      .then((user) => {
-        res.json(user);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send("Error: " + err);
-      });
+    try {
+      const user = await Users.findOne({ Username: req.params.Username });
+
+      if (!user) {
+        return res.status(400).send("User was not found");
+      }
+
+      res.json(user);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    }
   }
 );
 
@@ -186,6 +195,12 @@ app.put(
       "Username contains non alphanumeric characters - not allowed."
     ).isAlphanumeric(),
     check("Password", "Password is required").not().isEmpty(),
+    check("Password", "Password must have at least 8 characters").isLength({
+      min: 8,
+    }),
+    check("Password")
+      .custom((value) => !/\s/.test(value))
+      .withMessage("Password must not have spaces"),
     check("Email", "Invalid Email").isEmail(),
   ],
   passport.authenticate("jwt", { session: false }),
@@ -250,10 +265,20 @@ app.patch(
     if (req.user._id != req.params.UserID) {
       return res.status(400).send("Permission denied");
     }
+
+    if (req.user.FavouriteMovies.includes(req.params.MovieID)) {
+      return res.status(400).send("Movie already exists in user's favourites");
+    }
+
+    const movie = await Movies.findOne({ _id: req.params.MovieID });
+    if (!movie) {
+      return res.status(400).send("Could not find movie ID in database");
+    }
+
     await Users.findByIdAndUpdate(
       req.params.UserID,
       {
-        $push: { FavouriteMovies: req.params.MovieID },
+        $addToSet: { FavouriteMovies: req.params.MovieID },
       },
       { new: true }
     )
@@ -277,6 +302,11 @@ app.delete(
     if (req.user._id != req.params.UserID) {
       return res.status(400).send("Permission denied");
     }
+
+    if (!req.user.FavouriteMovies.includes(req.params.MovieID)) {
+      return res.status(400).send("Movie doesn't exist in user's favourites");
+    }
+
     await Users.findByIdAndUpdate(
       req.params.UserID,
       {
