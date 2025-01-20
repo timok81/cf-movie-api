@@ -1,7 +1,9 @@
 const express = require("express"),
   bodyParser = require("body-parser"),
   morgan = require("morgan"),
-  uuid = require("uuid");
+  uuid = require("uuid"),
+  swaggerJsDoc = require("swagger-jsdoc"),
+  swaggerUIExpress = require("swagger-ui-express");
 
 const mongoose = require("mongoose");
 const Models = require("./models.js");
@@ -15,6 +17,44 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 const { check, validationResult } = require("express-validator");
 app.use(bodyParser.json());
+
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Movies API",
+      version: "1.0.0",
+      description: "API documentation for the Movies API",
+    },
+    servers: [
+      {
+        url: "http://localhost:8080", // Update with your server URL
+      },
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT", // Optional, but indicates that it's a JWT
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+  },
+  apis: ["index.js"], // Update with the path to your route file
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use(
+  "/api-documentation",
+  swaggerUIExpress.serve,
+  swaggerUIExpress.setup(swaggerDocs)
+);
 
 const cors = require("cors");
 app.use(cors());
@@ -32,7 +72,21 @@ app.get("/", (req, res) => {
   res.send("Welcome to the movie database!");
 });
 
-//Returns all movies
+/**
+ * @swagger
+ * /movies:
+ *   get:
+ *     summary: Retrieve all movies
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *       - Movies
+ *     responses:
+ *       200:
+ *         description: A list of movies.
+ *       400:
+ *         description: Bad request, error occurred.
+ */
 app.get(
   "/movies",
   passport.authenticate("jwt", { session: false }),
@@ -41,7 +95,7 @@ app.get(
       .populate("Actors")
       .exec()
       .then((movies) => {
-        res.status(201).json(movies);
+        res.status(200).json(movies);
       })
       .catch((err) => {
         console.error(err);
@@ -50,7 +104,33 @@ app.get(
   }
 );
 
-//Returns a movie by name
+/**
+ * @swagger
+ * /movies/{Name}:
+ *   get:
+ *     summary: Retrieve a movie by its name
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *       - Movies
+ *     parameters:
+ *       - in: path
+ *         name: Name
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The name of the movie
+ *     responses:
+ *       200:
+ *         description: A movie object
+ *
+ *       400:
+ *         description: Bad request, error occurred.
+ *
+ *       404:
+ *         description: Movie not found
+ *
+ */
 app.get(
   "/movies/:Name",
   passport.authenticate("jwt", { session: false }),
@@ -68,7 +148,33 @@ app.get(
   }
 );
 
-//Returns a genre by name
+/**
+ * @swagger
+ * /genres/{Name}:
+ *   get:
+ *     summary: Retrieve a genre by its name
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *       - Genres
+ *     parameters:
+ *       - in: path
+ *         name: Name
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The name of the genre
+ *     responses:
+ *       200:
+ *         description: A Genre object
+ *
+ *       400:
+ *         description: Bad request, error occurred.
+ *
+ *       404:
+ *         description: Genre not found
+ *
+ */
 app.get(
   "/genres/:Genre",
   passport.authenticate("jwt", { session: false }),
@@ -84,7 +190,33 @@ app.get(
   }
 );
 
-//Returns a director by name
+/**
+ * @swagger
+ * /directors/{Name}:
+ *   get:
+ *     summary: Retrieve a director by their name
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *       - Genres
+ *     parameters:
+ *       - in: path
+ *         name: Name
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The name of the director
+ *     responses:
+ *       200:
+ *         description: A director object
+ *
+ *       400:
+ *         description: Bad request, error occurred.
+ *
+ *       404:
+ *         description: Genre not found
+ *
+ */
 app.get(
   "/directors/:Director",
   passport.authenticate("jwt", { session: false }),
@@ -100,7 +232,106 @@ app.get(
   }
 );
 
-//Create a user, hash password with bcrypt, validate fields with express-validator
+/**
+ * @swagger
+ * /users:
+ *   post:
+ *     summary: Create a new user account
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - Username
+ *               - Password
+ *               - Email
+ *             properties:
+ *               Username:
+ *                 type: string
+ *                 description: The username for the new account.
+ *                 example: johndoe
+ *               Password:
+ *                 type: string
+ *                 description: The password for the new account. Must be at least 8 characters and contain no spaces.
+ *                 example: password123
+ *               Email:
+ *                 type: string
+ *                 description: The email for the new account.
+ *                 example: johndoe@example.com
+ *               Birthday:
+ *                 type: string
+ *                 format: date
+ *                 description: The birthday of the user.
+ *                 example: 1990-01-01
+ *     responses:
+ *       201:
+ *         description: User created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   description: The user ID.
+ *                   example: 60b6c0fda5b4f63d2c8e4b9e
+ *                 Username:
+ *                   type: string
+ *                   description: The username.
+ *                   example: johndoe
+ *                 Email:
+ *                   type: string
+ *                   description: The email address.
+ *                   example: johndoe@example.com
+ *                 Birthday:
+ *                   type: string
+ *                   format: date
+ *                   description: The birthday of the user.
+ *                   example: 1990-01-01
+ *       400:
+ *         description: Username already exists.
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: johndoe already exists
+ *       422:
+ *         description: Validation error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       msg:
+ *                         type: string
+ *                         description: The validation error message.
+ *                         example: Password must not have spaces
+ *                       param:
+ *                         type: string
+ *                         description: The field that caused the error.
+ *                         example: Password
+ *                       location:
+ *                         type: string
+ *                         description: The location of the field (body, query, params, etc.).
+ *                         example: body
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: |
+ *                 Error: some error message
+ */
 app.post(
   "/users",
   [
@@ -149,7 +380,21 @@ app.post(
   }
 );
 
-//Get all users
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     summary: Retrieve all users
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *       - Users
+ *     responses:
+ *       200:
+ *         description: A list of users.
+ *       500:
+ *         description: Bad request, error occurred.
+ */
 app.get(
   "/users",
   passport.authenticate("jwt", { session: false }),
@@ -165,7 +410,33 @@ app.get(
   }
 );
 
-//Get one user by Username
+/**
+ * @swagger
+ * /users/{Name}:
+ *   get:
+ *     summary: Retrieve a user by their name
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *       - Genres
+ *     parameters:
+ *       - in: path
+ *         name: Name
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The name of the user
+ *     responses:
+ *       200:
+ *         description: A user object
+ *
+ *       400:
+ *         description: Bad request, error occurred.
+ *
+ *       404:
+ *         description: Genre not found
+ *
+ */
 app.get(
   "/users/:Username",
   passport.authenticate("jwt", { session: false }),
@@ -185,7 +456,115 @@ app.get(
   }
 );
 
-//Update user info by user ID, validate fields with express-validator
+/**
+ * @swagger
+ * /users/{UserID}:
+ *   put:
+ *     summary: Update user information
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - in: path
+ *         name: UserID
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the user whose information is to be updated.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - Username
+ *               - Password
+ *               - Email
+ *             properties:
+ *               Username:
+ *                 type: string
+ *                 description: The new username.
+ *                 example: john_doe_updated
+ *               Password:
+ *                 type: string
+ *                 description: The new password. Must be at least 8 characters and contain no spaces.
+ *                 example: newpassword123
+ *               Email:
+ *                 type: string
+ *                 description: The new email address.
+ *                 example: john.doe.updated@example.com
+ *               Birthday:
+ *                 type: string
+ *                 format: date
+ *                 description: The new birthday of the user.
+ *                 example: 1992-02-15
+ *     responses:
+ *       200:
+ *         description: User information updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   description: The user ID.
+ *                   example: 60b6c0fda5b4f63d2c8e4b9e
+ *                 Username:
+ *                   type: string
+ *                   description: The updated username.
+ *                   example: john_doe_updated
+ *                 Email:
+ *                   type: string
+ *                   description: The updated email address.
+ *                   example: john.doe.updated@example.com
+ *                 Birthday:
+ *                   type: string
+ *                   format: date
+ *                   description: The updated birthday of the user.
+ *                   example: 1992-02-15
+ *       400:
+ *         description: Permission denied (if the user does not match the ID in the request).
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: Permission denied
+ *       422:
+ *         description: Validation error (e.g., invalid username, password, or email).
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       msg:
+ *                         type: string
+ *                         description: The validation error message.
+ *                         example: Password must not have spaces
+ *                       param:
+ *                         type: string
+ *                         description: The field that caused the error.
+ *                         example: Password
+ *                       location:
+ *                         type: string
+ *                         description: The location of the field (body, query, params, etc.).
+ *                         example: body
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: |
+ *                Error: some error message
+ */
 app.put(
   "/users/:UserID",
   [
@@ -234,7 +613,70 @@ app.put(
   }
 );
 
-//Removes user by ID(can only be done by an account with the same ID)
+/**
+ * @swagger
+ * /users/{UserID}:
+ *   delete:
+ *     summary: Remove a user from the database
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - in: path
+ *         name: UserID
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the user to be deleted.
+ *     responses:
+ *       200:
+ *         description: User deleted successfully.
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: User 60b6c0fda5b4f63d2c8e4b9e was deleted.
+ *       400:
+ *         description: Permission denied or user not found.
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: User 60b6c0fda5b4f63d2c8e4b9e was not found
+ *       422:
+ *         description: Validation error (invalid user ID).
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       msg:
+ *                         type: string
+ *                         description: The validation error message.
+ *                         example: Invalid user ID format
+ *                       param:
+ *                         type: string
+ *                         description: The field that caused the error.
+ *                         example: UserID
+ *                       location:
+ *                         type: string
+ *                         description: The location of the field (body, query, params, etc.).
+ *                         example: params
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: |
+ *                Error: some error message
+ */
 app.delete(
   "/users/:UserID",
   passport.authenticate("jwt", { session: false }),
@@ -257,7 +699,52 @@ app.delete(
   }
 );
 
-//Adds a movie to user's favorites, both by ID
+/**
+ * @swagger
+ * /users/{UserID}/movies/{MovieID}:
+ *   patch:
+ *     summary: Add a movie to a user's favourite list by ID
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - in: path
+ *         name: UserID
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the user.
+ *       - in: path
+ *         name: MovieID
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the movie to be added to favourites.
+ *     responses:
+ *       200:
+ *         description: Movie was successfully added to the user's favourites.
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: Movie 60b6c0fda5b4f63d2c8e4b9e was added to favourites
+ *       400:
+ *         description: Error if the movie already exists in the user's favourites or if the movie does not exist in the database.
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: Movie already exists in user's favourites
+ *       500:
+ *         description: Internal server error if something goes wrong while adding the movie.
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: |
+ *                Error: some error message
+ */
 app.patch(
   "/users/:UserID/movies/:MovieID",
   passport.authenticate("jwt", { session: false }),
@@ -294,7 +781,53 @@ app.patch(
   }
 );
 
-//Deletes a movie from favorites, by ID
+
+/**
+ * @swagger
+ * /users/{UserID}/movies/{MovieID}:
+ *   delete:
+ *     summary: Remove a movie from a user's favourite list by ID
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - in: path
+ *         name: UserID
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the user.
+ *       - in: path
+ *         name: MovieID
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the movie to be removed from favourites.
+ *     responses:
+ *       200:
+ *         description: Movie was successfully removed from the user's favourites.
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: Movie 60b6c0fda5b4f63d2c8e4b9e was removed from favourites
+ *       400:
+ *         description: Error if the movie does not exist in the user's favourites.
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: Movie doesn't exist in user's favourites
+ *       500:
+ *         description: Internal server error if something goes wrong while removing the movie.
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: |
+ *                Error: some error message
+ */
 app.delete(
   "/users/:UserID/movies/:MovieID",
   passport.authenticate("jwt", { session: false }),
@@ -326,7 +859,21 @@ app.delete(
   }
 );
 
-//Returns all actors
+/**
+ * @swagger
+ * /actors:
+ *   get:
+ *     summary: Retrieve all actors
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *       - Actors
+ *     responses:
+ *       200:
+ *         description: A list of actors.
+ *       400:
+ *         description: Bad request, error occurred.
+ */
 app.get(
   "/actors",
   passport.authenticate("jwt", { session: false }),
@@ -335,7 +882,7 @@ app.get(
       .populate("Movies")
       .exec()
       .then((actors) => {
-        res.status(201).json(actors);
+        res.status(200).json(actors);
       })
       .catch((err) => {
         console.error(err);
@@ -344,7 +891,33 @@ app.get(
   }
 );
 
-//Returns an actor by name
+/**
+ * @swagger
+ * /actors/{Name}:
+ *   get:
+ *     summary: Retrieve an actor by their name
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *       - Genres
+ *     parameters:
+ *       - in: path
+ *         name: Name
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The name of the actor
+ *     responses:
+ *       200:
+ *         description: An actor object
+ *
+ *       400:
+ *         description: Bad request, error occurred.
+ *
+ *       404:
+ *         description: Genre not found
+ *
+ */
 app.get(
   "/actors/:Name",
   passport.authenticate("jwt", { session: false }),
