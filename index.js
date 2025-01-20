@@ -11,7 +11,7 @@ const Movies = Models.Movie;
 const Users = Models.User;
 const Actors = Models.Actor;
 
-mongoose.connect(process.env.CONNECTION_URI);
+//mongoose.connect(process.env.CONNECTION_URI);
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -28,7 +28,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "http://localhost:8080",
+        url: "https://moviemovie-7703363b92cb.herokuapp.com/",
       },
     ],
     components: {
@@ -46,7 +46,7 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ["index.js"],
+  apis: ["index.js", "auth.js"],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
