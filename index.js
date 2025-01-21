@@ -89,6 +89,7 @@ app.get("/", (req, res) => {
  */
 app.get(
   "/movies",
+
   async (req, res) => {
     await Movies.find()
       .populate("Actors")
