@@ -573,10 +573,13 @@ app.put(
       "Username",
       "Username contains non alphanumeric characters - not allowed."
     ).isAlphanumeric(),
-    check("Password", "Password is required").not().isEmpty(),
-    check("Password", "Password must have at least 8 characters").isLength({
-      min: 8,
-    }),
+    check("Password")
+      .optional()
+      .isLength({ min: 8 })
+      .withMessage("Password must have at least 8 characters")
+      .custom((value) => !/\s/.test(value))
+      .withMessage("Password must not have spaces"),
+    ,
     check("Password")
       .custom((value) => !/\s/.test(value))
       .withMessage("Password must not have spaces"),
@@ -780,7 +783,6 @@ app.patch(
       });
   }
 );
-
 
 /**
  * @swagger
