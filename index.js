@@ -591,16 +591,18 @@ app.put(
     if (req.user._id != req.params.UserID) {
       return res.status(400).send("Permission denied");
     }
+    const updateFields = {
+      Username: req.body.Username,
+      Email: req.body.Email,
+      Birthday: req.body.Birthday,
+    };
+
+    if (req.body.Password) {
+      updateFields.Password = Users.hashPassword(req.body.Password);
+    }
     await Users.findOneAndUpdate(
       { _id: req.params.UserID },
-      {
-        $set: {
-          Username: req.body.Username,
-          Password: req.body.Password,
-          Email: req.body.Email,
-          Birthday: req.body.Birthday,
-        },
-      },
+      { $set: updateFields },
       { new: true }
     )
       .then((updatedUser) => {
@@ -780,7 +782,6 @@ app.patch(
       });
   }
 );
-
 
 /**
  * @swagger
