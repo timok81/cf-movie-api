@@ -579,10 +579,7 @@ app.put(
       .withMessage("Password must have at least 8 characters")
       .custom((value) => !/\s/.test(value))
       .withMessage("Password must not have spaces"),
-    ,
-    check("Password")
-      .custom((value) => !/\s/.test(value))
-      .withMessage("Password must not have spaces"),
+
     check("Email", "Invalid Email").isEmail(),
   ],
   passport.authenticate("jwt", { session: false }),
@@ -783,6 +780,7 @@ app.patch(
       });
   }
 );
+
 
 /**
  * @swagger
