@@ -756,7 +756,7 @@ app.patch(
     }
 
     if (req.user.FavouriteMovies.includes(req.params.MovieID)) {
-      return res.status(400).send("Movie already exists in user's favourites");
+      return res.status(200).json(req.user);
     }
 
     const movie = await Movies.findOne({ _id: req.params.MovieID });
@@ -840,7 +840,7 @@ app.delete(
     }
 
     if (!req.user.FavouriteMovies.includes(req.params.MovieID)) {
-      return res.status(400).send("Movie doesn't exist in user's favourites");
+      return res.status(200).json(req.user);
     }
 
     try {
