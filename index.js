@@ -764,22 +764,24 @@ app.patch(
       return res.status(400).send("Could not find movie ID in database");
     }
 
-    await Users.findByIdAndUpdate(
-      req.params.UserID,
-      {
-        $addToSet: { FavouriteMovies: req.params.MovieID },
-      },
-      { new: true }
-    )
-      .then(() => {
-        res
-          .status(200)
-          .send("Movie " + req.params.MovieID + " was added to favourites");
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send("Error: " + err);
-      });
+    try {
+      const updatedUser = await Users.findByIdAndUpdate(
+        req.params.UserID,
+        {
+          $addToSet: { FavouriteMovies: req.params.MovieID },
+        },
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        return res.status(404).send("User not found");
+      }
+
+      res.status(200).json(updatedUser);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    }
   }
 );
 
@@ -841,22 +843,24 @@ app.delete(
       return res.status(400).send("Movie doesn't exist in user's favourites");
     }
 
-    await Users.findByIdAndUpdate(
-      req.params.UserID,
-      {
-        $pull: { FavouriteMovies: req.params.MovieID },
-      },
-      { new: true }
-    )
-      .then(() => {
-        res
-          .status(200)
-          .send("Movie " + req.params.MovieID + " was removed from favourites");
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send("Error: " + err);
-      });
+    try {
+      const updatedUser = await Users.findByIdAndUpdate(
+        req.params.UserID,
+        {
+          $pull: { FavouriteMovies: req.params.MovieID },
+        },
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        return res.status(404).send("User not found");
+      }
+
+      res.status(200).json(updatedUser);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    }
   }
 );
 
