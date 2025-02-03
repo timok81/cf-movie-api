@@ -480,7 +480,6 @@ app.get(
  *             type: object
  *             required:
  *               - Username
- *               - Password
  *               - Email
  *             properties:
  *               Username:
@@ -526,7 +525,7 @@ app.get(
  *                   description: The updated birthday of the user.
  *                   example: 1992-02-15
  *       400:
- *         description: Permission denied (if the user does not match the ID in the request).
+ *         description: Permission denied or user not found.
  *         content:
  *           text/plain:
  *             schema:
@@ -562,8 +561,7 @@ app.get(
  *           text/plain:
  *             schema:
  *               type: string
- *               example: |
- *                Error: some error message
+ *               example: Error: some error message
  */
 app.put(
   "/users/:UserID",
@@ -725,27 +723,42 @@ app.delete(
  *         description: The ID of the movie to be added to favourites.
  *     responses:
  *       200:
- *         description: Movie was successfully added to the user's favourites.
+ *         description: Movie successfully added to the user's favourites or already exists.
  *         content:
- *           text/plain:
+ *           application/json:
  *             schema:
- *               type: string
- *               example: Movie 60b6c0fda5b4f63d2c8e4b9e was added to favourites
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   description: The user ID.
+ *                   example: 60b6c0fda5b4f63d2c8e4b9e
+ *                 FavouriteMovies:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   description: List of favourite movie IDs.
  *       400:
- *         description: Error if the movie already exists in the user's favourites or if the movie does not exist in the database.
+ *         description: Permission denied or movie not found.
  *         content:
  *           text/plain:
  *             schema:
  *               type: string
- *               example: Movie already exists in user's favourites
+ *               example: Could not find movie ID in database
+ *       404:
+ *         description: User not found.
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: User not found
  *       500:
- *         description: Internal server error if something goes wrong while adding the movie.
+ *         description: Internal server error.
  *         content:
  *           text/plain:
  *             schema:
  *               type: string
- *               example: |
- *                Error: some error message
+ *               example: Error: some error message
  */
 app.patch(
   "/users/:UserID/movies/:MovieID",
@@ -809,27 +822,42 @@ app.patch(
  *         description: The ID of the movie to be removed from favourites.
  *     responses:
  *       200:
- *         description: Movie was successfully removed from the user's favourites.
+ *         description: Movie successfully removed from the user's favourites or was not in the list.
  *         content:
- *           text/plain:
+ *           application/json:
  *             schema:
- *               type: string
- *               example: Movie 60b6c0fda5b4f63d2c8e4b9e was removed from favourites
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   description: The user ID.
+ *                   example: 60b6c0fda5b4f63d2c8e4b9e
+ *                 FavouriteMovies:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   description: List of favourite movie IDs.
  *       400:
- *         description: Error if the movie does not exist in the user's favourites.
+ *         description: Permission denied.
  *         content:
  *           text/plain:
  *             schema:
  *               type: string
- *               example: Movie doesn't exist in user's favourites
+ *               example: Permission denied
+ *       404:
+ *         description: User not found.
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: User not found
  *       500:
- *         description: Internal server error if something goes wrong while removing the movie.
+ *         description: Internal server error.
  *         content:
  *           text/plain:
  *             schema:
  *               type: string
- *               example: |
- *                Error: some error message
+ *               example: Error: some error message
  */
 app.delete(
   "/users/:UserID/movies/:MovieID",
