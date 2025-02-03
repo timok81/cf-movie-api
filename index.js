@@ -561,7 +561,8 @@ app.get(
  *           text/plain:
  *             schema:
  *               type: string
- *               example: Error: some error message
+ *               example: |
+ *                 Error: some error message
  */
 app.put(
   "/users/:UserID",
@@ -758,7 +759,8 @@ app.delete(
  *           text/plain:
  *             schema:
  *               type: string
- *               example: Error: some error message
+ *               example: |
+ *                 Error: some error message
  */
 app.patch(
   "/users/:UserID/movies/:MovieID",
@@ -857,7 +859,8 @@ app.patch(
  *           text/plain:
  *             schema:
  *               type: string
- *               example: Error: some error message
+ *               example: |
+ *                 Error: some error message
  */
 app.delete(
   "/users/:UserID/movies/:MovieID",
