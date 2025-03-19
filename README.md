@@ -2,7 +2,8 @@
 
 ## Overview
 
-A Node/Express API created using MongoDB and Mongoose. Created for a simple movie database site. Contains endpoints for accessing movies and user data. Uses Passport as security middleware.
+A Node/Express API created using MongoDB and Mongoose. Created for a simple movie database site. Contains endpoints for accessing movies and user data. Uses Passport as security middleware.  
+The documentation may be viewed here: https://moviemovie-7703363b92cb.herokuapp.com/api-documentation/
 
 ## Installation
 

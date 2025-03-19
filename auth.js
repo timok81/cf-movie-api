@@ -1,12 +1,12 @@
 const jwtSecret = "your_jwt_secret";
 
-const jwt = require("jsonwebtoken"),
-  passport = require("passport");
+import { sign } from "jsonwebtoken";
+import { authenticate } from "passport";
 
-require("./passport");
+import "./passport";
 
 let generateJWTToken = (user) => {
-  return jwt.sign(user, jwtSecret, {
+  return sign(user, jwtSecret, {
     subject: user.Username,
     expiresIn: "7d",
     algorithm: "HS256",
@@ -38,9 +38,9 @@ let generateJWTToken = (user) => {
  *   token: ""
  * }
  */
-module.exports = (router) => {
+export default (router) => {
   router.post("/login", (req, res) => {
-    passport.authenticate("local", { session: false }, (error, user, info) => {
+    authenticate("local", { session: false }, (error, user, info) => {
       if (error || !user) {
         return res.status(400).json({
           message: "Something is not right",
