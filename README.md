@@ -20,3 +20,13 @@ The documentation may be viewed here: https://moviemovie-7703363b92cb.herokuapp.
 - Various endpoints for getting and manipulating user data
 - Endpoints for creating an account and logging in
 - Passport's LocalStrategy and JWTStrategy for security
+
+## Technologies used
+
+- Node
+- Express
+- MongoDb
+- Mongoose
+- Postman (for testing)
+- Passport
+- Express validator
