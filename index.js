@@ -8,7 +8,7 @@ const Movies = Models.Movie;
 const Users = Models.User;
 const Actors = Models.Actor;
 
-mongoose.connect(process.env.CONNECTION_URI);
+mongoose.connect("mongodb://127.0.0.1:27017/cfMovies");
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 const cors = require("cors");
 app.use(cors());
 
-let auth = require("./auth").default(app);
+let auth = require("./auth")(app);
 const passport = require("passport");
 require("./passport");
 
