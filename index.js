@@ -8,7 +8,7 @@ const Movies = Models.Movie;
 const Users = Models.User;
 const Actors = Models.Actor;
 
-mongoose.connect("mongodb://127.0.0.1:27017/cfMovies");
+mongoose.connect(process.env.CONNECTION_URI);
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
