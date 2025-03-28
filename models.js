@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
 let movieSchema = mongoose.Schema({
-  Title: { type: String, required: true },
+  Name: { type: String, required: true },
   Description: { type: String, required: true },
+  Released: String,
   Genre: {
     Name: String,
     Description: String,
@@ -11,10 +12,14 @@ let movieSchema = mongoose.Schema({
   Director: {
     Name: String,
     Bio: String,
+    BirthYear: String,
+    DeathYear: String,
+    ImagePath: String,
   },
   Actors: [{ type: mongoose.Schema.Types.ObjectId, ref: "Actor" }],
   ImagePath: String,
   Featured: Boolean,
+  TrailerPath: String,
 });
 
 let userSchema = mongoose.Schema({
@@ -30,7 +35,7 @@ userSchema.statics.hashPassword = (password) => {
 };
 
 //Not using arrow function since it needs to be bound to the user
-userSchema.methods.validatePassword = function(password) {
+userSchema.methods.validatePassword = function (password) {
   return bcrypt.compareSync(password, this.Password);
 };
 
