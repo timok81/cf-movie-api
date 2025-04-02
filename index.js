@@ -3,10 +3,14 @@ const express = require("express"),
   morgan = require("morgan");
 
 const mongoose = require("mongoose");
+require("dotenv").config();
+
 const Models = require("./models.js");
 const Movies = Models.Movie;
 const Users = Models.User;
 const Actors = Models.Actor;
+const Directors = Models.Director;
+const Trailers = Models.Trailer;
 
 mongoose.connect(process.env.CONNECTION_URI);
 
@@ -30,6 +34,100 @@ app.use(express.static("public"));
 app.get("/", (req, res) => {
   res.send("Welcome to the movie database!");
 });
+
+// Adds a movie to db and converts actor/director/trailer to database IDs
+// Updates actors and directors movies arrays with this movie's id
+// Creates placeholder db docs for actors and directors that don't exist
+app.post(
+  "/movies",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const user = req.user;
+    if (user.Role !== "admin") {
+      res.status(403).send("Unauthorized");
+    }
+
+    const bodyData = req.body;
+    if (!bodyData) {
+      res.status(500).send("Error: " + error);
+    }
+
+    try {
+      // Grab existing director id or create a new director and grab its id if director doesn't exist in db yet
+      let databaseDirector = await Directors.findOne({
+        Name: bodyData.Director,
+      });
+      if (!databaseDirector) {
+        await Directors.create({
+          Name: bodyData.Director,
+          Bio: "No biography available",
+          BirthYear: "????",
+          DeathYear: null,
+          Movies: [],
+          ImagePath:
+            "https://moviemovie-7703363b92cb.herokuapp.com/images/sample-movie.jpg",
+        });
+        const justCreatedDirector = await Directors.findOne({
+          Name: bodyData.Director,
+        });
+        bodyData.Director = justCreatedDirector._id;
+      } else {
+        bodyData.Director = databaseDirector._id;
+      }
+
+      let databaseActors = await Actors.find();
+      let actorIdArray = [];
+
+      // Grab existing actor id or create a new actor and grab its id if actor doesn't exist in db yet
+      bodyData.Actors.forEach(async (element) => {
+        const matchingActor = databaseActors.find(
+          (actor) => actor.Name == element
+        );
+        if (!matchingActor) {
+          await Actors.create({
+            Name: element,
+            Bio: "No biography available",
+            BirthYear: "????",
+            DeathYear: null,
+            Movies: [],
+            ImagePath:
+              "https://moviemovie-7703363b92cb.herokuapp.com/images/sample-movie.jpg",
+          });
+          const justCreatedActor = await Actors.findOne({ Name: element });
+          actorIdArray.push(justCreatedActor._id);
+        } else {
+          actorIdArray.push(matchingActor._id);
+        }
+      });
+
+      bodyData.Actors = actorIdArray;
+
+      let trailers = await Trailers.find({ Movie: bodyData.Name });
+      trailers.forEach((element) => {
+        bodyData.Trailers.push(element._id);
+      });
+
+      const dbMovie = await Movies.create(bodyData);
+
+      await Actors.updateMany(
+        { _id: { $in: dbMovie.Actors } },
+        { $addToSet: { Movies: dbMovie._id } }
+      );
+      await Directors.updateOne(
+        { _id: { $in: dbMovie.Director } },
+        { $addToSet: { Movies: dbMovie._id } }
+      );
+      await Trailers.updateMany(
+        { _id: { $in: dbMovie.Trailers } },
+        { Movie_id: dbMovie._id }
+      );
+
+      res.status(200).json({ dbMovie });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+);
 
 /**
  * @description Get all movies
@@ -59,7 +157,9 @@ app.get(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     await Movies.find()
+      .populate("Director")
       .populate("Actors")
+      .populate("Trailers")
       .exec()
       .then((movies) => {
         res.status(200).json(movies);
@@ -97,7 +197,9 @@ app.get(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     await Movies.findOne({ Name: req.params.Name })
+      .populate("Director")
       .populate("Actors")
+      .populate("Trailers")
       .exec()
       .then((movie) => {
         res.json(movie);
@@ -128,7 +230,7 @@ app.get(
   "/genres/:Genre",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    await Movies.findOne({ "Genre.Name": req.params.Genre })
+    await Movies.findOne({ Genre: req.params.Genre })
       .then((movie) => {
         res.json(movie.Genre);
       })
@@ -161,9 +263,9 @@ app.get(
   "/directors/:Director",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    await Movies.findOne({ "Director.Name": req.params.Director })
-      .then((movie) => {
-        res.json(movie.Director);
+    await Directors.findOne({ "Director.Name": req.params.Director })
+      .then((director) => {
+        res.json(director);
       })
       .catch((err) => {
         console.error(err);
@@ -611,7 +713,7 @@ app.get(
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  req.status(500).send("Error");
+  res.status(500).send("Error");
 });
 
 const port = process.env.PORT || 8080;
