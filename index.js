@@ -711,6 +711,40 @@ app.get(
   }
 );
 
+app.get(
+  "/directors",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    await Directors.find()
+      .populate("Movies")
+      .exec()
+      .then((directors) => {
+        res.status(200).json(directors);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(400).send("Error: " + err);
+      });
+  }
+);
+
+app.get(
+  "/directors/:Name",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    await Directors.findOne({ Name: req.params.Name })
+      .populate("Movies")
+      .exec()
+      .then((director) => {
+        res.json(director);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(400).send("Error: " + err);
+      });
+  }
+);
+
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Error");
