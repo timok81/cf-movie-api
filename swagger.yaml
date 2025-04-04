@@ -1,0 +1,328 @@
+openapi: 3.0.0
+info:
+  title: Movie database API
+  version: 1.0.0
+servers:
+  - url: https://moviemovie-7703363b92cb.herokuapp.com
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+paths:
+  /movies:
+    get:
+      tags:
+        - default
+      summary: Get All Movies
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - default
+      summary: Add movie. Only available to users with admin role.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Name: Iron Man 3
+                Genre: Action
+                Director: Shane Black
+                Released: '2013'
+                Description: >-
+                  Tony Stark battles the mysterious Mandarin while dealing with
+                  the trauma of past events.
+                ImagePath: >-
+                  https://image.tmdb.org/t/p/w600_and_h900_bestv2/qhPtAc1TKbMPqNvcdXSOn9Bn7hZ.jpg
+                Featured: false
+                Actors:
+                  - Robert Downey Jr.
+                  - Gwyneth Paltrow
+                  - Ben Kingsley
+                Trailers: []
+                Rating: '85'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /movies/{name}:
+    parameters:
+      - in: path
+        name: name
+        schema:
+          type: string
+        required: true
+        description: The movie name
+    get:
+      tags:
+        - default
+      summary: Get Movie By Name
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /genres/{name}:
+    parameters:
+      - in: path
+        name: name
+        schema:
+          type: string
+        required: true
+        description: The genre name
+    get:
+      tags:
+        - default
+      summary: Get Genre By Name
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /directors/{name}:
+    parameters:
+      - in: path
+        name: name
+        schema:
+          type: string
+        required: true
+        description: The director name
+    get:
+      tags:
+        - default
+      summary: Get Director By Name
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /users:
+    post:
+      tags:
+        - default
+      summary: Add User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Username: joe
+                Password: password123
+                Email: joe@example.com
+                Birthday: '1981-04-16T00:00:00.000Z'
+                FavouriteMovies: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - default
+      summary: Get All Users
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /users/{name}:
+    parameters:
+      - in: path
+        name: name
+        schema:
+          type: string
+        required: true
+        description: The username
+    get:
+      tags:
+        - default
+      summary: Get User By Username
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /users/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: The user id
+    put:
+      tags:
+        - default
+      summary: Update User Info By ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Username: timok81
+                Password: timotester
+                Email: timokujansuu@gmail.com
+                Birthday: '1981-04-16'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /users/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: The user id
+    delete:
+      tags:
+        - default
+      summary: Delete User By ID
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /users/{id}/movies/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: The user ID
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: The movie ID
+    patch:
+      tags:
+        - default
+      summary: Add Movie To Favs By ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example: ''
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /users/{id}/movies/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: The user ID
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: The movie ID
+    delete:
+      tags:
+        - default
+      summary: Delete Movie From Favs By ID
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /actors:
+    get:
+      tags:
+        - default
+      summary: Get All Actors
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /actors/{name}:
+    parameters:
+      - in: path
+        name: name
+        schema:
+          type: string
+        required: true
+        description: The actor name
+    get:
+      tags:
+        - default
+      summary: Get Actor By Name
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /login:
+    post:
+      tags:
+        - default
+      summary: Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                Username: joe
+                Password: password123
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /:
+    get:
+      tags:
+        - default
+      summary: Root
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}

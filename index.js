@@ -5,6 +5,11 @@ const express = require("express"),
 const mongoose = require("mongoose");
 require("dotenv").config();
 
+// Swagger
+const swaggerUI = require("swagger-ui-express");
+const YAML = require("yamljs");
+const swaggerDocument = YAML.load("./swagger.yaml");
+
 const Models = require("./models.js");
 const Movies = Models.Movie;
 const Users = Models.User;
@@ -28,11 +33,12 @@ require("./passport");
 
 app.use(morgan("common"));
 app.use(express.static("public"));
+app.use("./api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 //------------------------------------------------------------------//
 
 app.get("/", (req, res) => {
-  res.send("Welcome to the movie database!");
+  res.send("<h1>Movie database API</h1><a href='/api-docs'>Documentation</a>");
 });
 
 // Adds a movie to db and converts actor/director/trailer to database IDs
@@ -129,29 +135,6 @@ app.post(
   }
 );
 
-/**
- * @description Get all movies
- * @name GET /movies
- * @example
- * Authentication: Bearer token (JWT)
- * @example
- * Request data format
- * none
- * @example
- * Response data format
- * [
- *   {
- *     _id: ObjectID,
- *     "Title": "",
- *     "Description": "",
- *     "Genre": ObjectID,
- *     "Director": [ObjectID],
- *     "Actors": [ObjectID],
- *     "ImagePath": "",
- *     "Featured": Boolean,
- *   }
- * ]
- */
 app.get(
   "/movies",
   passport.authenticate("jwt", { session: false }),
@@ -171,27 +154,6 @@ app.get(
   }
 );
 
-/**
- * @description Get a movie by title
- * @name GET /movies/:Name
- * @example
- * Authentication: Bearer token (JWT)
- * @example
- * Request data format
- * none
- * @example
- * Response data format
- * {
- *   _id: ObjectID,
- *   "Title": "",
- *   "Description": "",
- *   "Genre": ObjectID,
- *   "Director": [ObjectID],
- *   "Actors": [ObjectID],
- *   "ImagePath": "",
- *   "Featured": Boolean,
- * }
- */
 app.get(
   "/movies/:Name",
   passport.authenticate("jwt", { session: false }),
@@ -211,21 +173,6 @@ app.get(
   }
 );
 
-/**
- * @description Get Genre by name
- * @name GET /genres/:Genre
- * @example
- * Authentication: Bearer token (JWT)
- * @example
- * Request data format
- * none
- * @example
- * Response data format
- * {
- *   "Name": "",
- *   "Description": ""
- * }
- */
 app.get(
   "/genres/:Genre",
   passport.authenticate("jwt", { session: false }),
@@ -241,24 +188,6 @@ app.get(
   }
 );
 
-/**
- * @description Get a director by name
- * @name GET /directors/:Director
- * @example
- * Authentication: Bearer token (JWT)
- * @example
- * Request data format
- * none
- * @example
- * Response data format
- * {
- *   "Name": "",
- *   "Bio": "",
- *   "BirthYear": "",
- *   "DeathYear": ""
- *   "ImagePath": ""
- * }
- */
 app.get(
   "/directors/:Director",
   passport.authenticate("jwt", { session: false }),
@@ -274,28 +203,6 @@ app.get(
   }
 );
 
-/**
- * @description Register a new user
- * @name POST /users
- * @example
- * Request data format
- * {
- *   "Username": "",
- *   "Password": "",
- *   "Email": "",
- *   "Birthday": ""
- * }
- * @example
- * Response data format
- * {
- *   "_id": ObjectID,
- *   "Username": "",
- *   "Email": "",
- *   "Birthday": "",
- *   "Password": "",
- *   "FavoriteMovies": [ObjectID]
- * }
- */
 app.post(
   "/users",
   [
@@ -344,27 +251,6 @@ app.post(
   }
 );
 
-/**
- * @description Get all users
- * @name GET /users
- * @example
- * Authentication: Bearer token (JWT)
- * @example
- * Request data format
- * none
- * @example
- * Response data format
- * [
- *   {
- *   "_id": ObjectID,
- *   "Username": "",
- *   "Email": "",
- *   "Birthday": "",
- *   "Password": "",
- *   "FavoriteMovies": [ObjectID]
- *   }
- * ]
- */
 app.get(
   "/users",
   passport.authenticate("jwt", { session: false }),
@@ -380,25 +266,6 @@ app.get(
   }
 );
 
-/**
- * @description Get a user by username
- * @name GET /users/:Username
- * @example
- * Authentication: Bearer token (JWT)
- * @example
- * Request data format
- * none
- * @example
- * Response data format
- * {
- *   "_id": ObjectID,
- *   "Username": "",
- *   "Email": "",
- *   "Birthday": "",
- *   "Password": "",
- *   "FavoriteMovies": [ObjectID]
- * }
- */
 app.get(
   "/users/:Username",
   passport.authenticate("jwt", { session: false }),
@@ -418,30 +285,6 @@ app.get(
   }
 );
 
-/**
- * @description Update a user's details
- * @name PUT /users/:UserID
- * @example
- * Authentication: Bearer token (JWT)
- * @example
- * Request data format
- * {
- *   "Username": "",
- *   "Email": "",
- *   "Birthday": "",
- *   "Password": "",
- * }
- * @example
- * Response data format
- * {
- *   "_id": ObjectID,
- *   "Username": "",
- *   "Email": "",
- *   "Birthday": "",
- *   "Password": "",
- *   "FavoriteMovies": [ObjectID]
- * }
- */
 app.put(
   "/users/:UserID",
   [
@@ -492,18 +335,6 @@ app.put(
   }
 );
 
-/**
- * @description Delete a user by ID
- * @name DELETE /users/:UserID
- * @example
- * Authentication: Bearer token (JWT)
- * @example
- * Request data format
- * none
- * @example
- * Response data format
- * "User <UserID> was deleted."
- */
 app.delete(
   "/users/:UserID",
   passport.authenticate("jwt", { session: false }),
@@ -526,25 +357,6 @@ app.delete(
   }
 );
 
-/**
- * @description Add a movie to a user's favorite list
- * @name PATCH /users/:UserID/movies/:MovieID
- * @example
- * Authentication: Bearer token (JWT)
- * @example
- * Request data format
- * none
- * @example
- * Response data format
- * {
- *   "_id": ObjectID,
- *   "Username": "",
- *   "Email": "",
- *   "Birthday": "",
- *   "Password": "",
- *   "FavoriteMovies": [ObjectID]
- * }
- */
 app.patch(
   "/users/:UserID/movies/:MovieID",
   passport.authenticate("jwt", { session: false }),
@@ -583,25 +395,6 @@ app.patch(
   }
 );
 
-/**
- * @description Remove a movie from a user's favorite list
- * @name DELETE /users/:UserID/movies/:MovieID
- * @example
- * Authentication: Bearer token (JWT)
- * @example
- * Request data format
- * none
- * @example
- * Response data format
- * {
- *   "_id": ObjectID,
- *   "Username": "",
- *   "Email": "",
- *   "Birthday": "",
- *   "Password": "",
- *   "FavoriteMovies": [ObjectID]
- * }
- */
 app.delete(
   "/users/:UserID/movies/:MovieID",
   passport.authenticate("jwt", { session: false }),
@@ -635,28 +428,6 @@ app.delete(
   }
 );
 
-/**
- * @description Get all actors
- * @name GET /actors
- * @example
- * Authentication: Bearer token (JWT)
- * @example
- * Request data format
- * none
- * @example
- * Response data format
- * [
- * {
- *   "_id": ObjectID,
- *   "Name": "",
- *   "Bio": "",
- *   "BirthYear": "",
- *   "DeathYear": "",
- *   "Movies": [ObjectID],
- *   "ImagePath": "",
- * }
- * ]
- */
 app.get(
   "/actors",
   passport.authenticate("jwt", { session: false }),
@@ -674,26 +445,6 @@ app.get(
   }
 );
 
-/**
- * @description Get actor by name
- * @name GET /actors/:Name
- * @example
- * Authentication: Bearer token (JWT)
- * @example
- * Request data format
- * none
- * @example
- * Response data format
- * {
- *   "_id": ObjectID,
- *   "Name": "",
- *   "Bio": "",
- *   "BirthYear": "",
- *   "DeathYear": "",
- *   "Movies": [ObjectID],
- *   "ImagePath": "",
- * }
- */
 app.get(
   "/actors/:Name",
   passport.authenticate("jwt", { session: false }),
@@ -720,23 +471,6 @@ app.get(
       .exec()
       .then((directors) => {
         res.status(200).json(directors);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(400).send("Error: " + err);
-      });
-  }
-);
-
-app.get(
-  "/directors/:Name",
-  passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    await Directors.findOne({ Name: req.params.Name })
-      .populate("Movies")
-      .exec()
-      .then((director) => {
-        res.json(director);
       })
       .catch((err) => {
         console.error(err);
