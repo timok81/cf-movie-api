@@ -33,7 +33,7 @@ require("./passport");
 
 app.use(morgan("common"));
 app.use(express.static("public"));
-app.use("./api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 //------------------------------------------------------------------//
 
